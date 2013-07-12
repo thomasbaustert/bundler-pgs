@@ -47,7 +47,14 @@ Use the bundler patch by running `pundle` instead of `bundle`, e.g.:
 
     $ pundle install
 
-This will load the patch and runs bundler.
+This will load the patch and runs bundler as usual.
+
+You will also need to change the bundle command for capistrano:
+
+    # config/deploy.rb
+    ...
+    require "bundler/capistrano"
+    set :bundle_cmd, "pundle"
 
 ## Contact
 
