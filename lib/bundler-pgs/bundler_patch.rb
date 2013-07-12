@@ -1,3 +1,6 @@
+require "yaml"
+require 'bundler'
+
 ##
 # Patches bundler to use url with the credentials.
 #
