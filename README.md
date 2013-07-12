@@ -1,5 +1,7 @@
 # Bundler Private Gem Server Patch
 
+**This stuff is currently experimental!**
+
 Patch for bundler to support credentials for sources that are not stored in Gemfile.lock.
 
 Useful when running an additional private gem server besides rubygems.org.
