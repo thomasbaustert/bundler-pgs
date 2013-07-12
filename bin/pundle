@@ -17,5 +17,8 @@ end
 
 require 'bundler/cli'
 require 'bundler/friendly_errors'
+
 require 'bundler-pgs'
+puts "=> bundler patch v#{Bundler::Pgs::VERSION}"
+
 Bundler.with_friendly_errors { Bundler::CLI.start }
