@@ -2,13 +2,27 @@ require "yaml"
 require 'bundler'
 
 ##
-# Patches bundler to use url with the credentials.
+# Patches Bundler::RubygemsIntegration bundler to use url with the credentials.
 #
 module Bundler
   class RubygemsIntegration
     def download_gem(spec, uri, path)
       new_uri = ::BundlerPatch::UriResolver.resolve(uri)
       Gem::RemoteFetcher.fetcher.download(spec, new_uri, path)
+    end
+  end
+end
+
+##
+# Patches Bundler::Fetcher bundler to use url with the credentials.
+#
+module Bundler
+  class Fetcher
+    alias_method :orig_initialize, :initialize
+
+    def initialize(remote_uri)
+      new_uri = ::BundlerPatch::UriResolver.resolve(remote_uri)
+      orig_initialize(new_uri)
     end
   end
 end
@@ -23,7 +37,7 @@ module BundlerPatch
     def self.resolve(uri)
       if uri_with_hidden_credentials?(uri)
         new_uri = uri_with_credentials(uri)
-        Bundler.ui.debug "uri with credentials: '#{new_uri}'"
+        Bundler.ui.debug "[bundler-pgs] uri with credentials: '#{new_uri}'"
         new_uri
       else
         uri
@@ -46,12 +60,15 @@ module BundlerPatch
       new_uri = with_credential_file do |credential_filename|
         yaml = YAML.load_file(credential_filename)
 
-        credential_key = orig_uri.user == "_" ? "default" : orig_uri.user
-        credentials = yaml[credential_key]
+        new_uri = nil
+        if orig_uri.user == "_"
+          credentials = yaml["default"]
 
-        new_uri = orig_uri.dup
-        new_uri.user     = credentials["user"].to_s.strip
-        new_uri.password = credentials["password"].to_s.strip
+          new_uri = orig_uri.dup
+          new_uri.user     = credentials["user"].to_s.strip
+          new_uri.password = credentials["password"].to_s.strip
+        end
+
         new_uri
       end
 
