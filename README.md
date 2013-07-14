@@ -53,9 +53,9 @@ Change mod:
 
     $ chmod 600 ~/.gem/gemserver_credential
 
-Use the bundler patch by running `pundle` instead of `bundle`, e.g.:
+Use the bundler patch by running `bundle-pgs` instead of `bundle`, e.g.:
 
-    $ pundle install
+    $ bundle-pgs install
 
 This will load the patch and runs bundler as usual.
 
@@ -64,7 +64,7 @@ You will also need to change the bundle command for capistrano:
     # config/deploy.rb
     ...
     require "bundler/capistrano"
-    set :bundle_cmd, "pundle"
+    set :bundle_cmd, "bundle-pgs"
 
 ## Caveats
 
