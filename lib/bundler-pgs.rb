@@ -7,7 +7,6 @@ unless ["1.3.5"].include?(Bundler::VERSION)
 end
 
 require "bundler-pgs/version"
-require "bundler-pgs/http_patch"
 require "bundler-pgs/credential_file"
 require "bundler-pgs/bundler_patch"
 require "bundler-pgs/bundler_dsl_extension"
