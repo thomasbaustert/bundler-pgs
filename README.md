@@ -13,7 +13,7 @@ Example:
     # Gemfile.lock
     GEM
       remote: https://rubygems.org/
-      remote: http://_:_@gems.thomasbaustert.de/
+      remote: http://_:_@gems.mycompany.com/
 
 ## Warning
 
