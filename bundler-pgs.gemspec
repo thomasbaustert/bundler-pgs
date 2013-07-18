@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["business@thomasbaustert.de"]
   gem.description   = %q{bundler patch to support private gem server (pgs)}
   gem.summary       = %q{bundler patch to support private gem server (pgs)}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/thomasbaustert/bundler-pgs"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
