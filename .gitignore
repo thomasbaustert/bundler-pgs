@@ -18,3 +18,5 @@ tmp
 /.idea
 /coverage*
 Gemfile.lock
+/_doc
+
