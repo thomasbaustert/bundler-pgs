@@ -6,7 +6,7 @@ Useful when running an additional private gem server besides rubygems.org.
 Example:
 
     # Gemfile
-    source https://rubygems.org/
+    source "https://rubygems.org/"
     source "http://_:_@gems.mycompany.com"
 
     # Gemfile.lock
