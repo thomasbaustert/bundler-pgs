@@ -1,6 +1,4 @@
-# Bundler Private Gem Server Patch
-
-**This stuff is currently experimental!**
+# Bundler Private Gem Server
 
 Patch for bundler to support credentials for sources that are not stored in Gemfile.lock.
 Useful when running an additional private gem server besides rubygems.org.
@@ -8,6 +6,7 @@ Useful when running an additional private gem server besides rubygems.org.
 Example:
 
     # Gemfile
+    source https://rubygems.org/
     source "http://_:_@gems.mycompany.com"
 
     # Gemfile.lock
@@ -23,24 +22,45 @@ To prevent bundler from storing a source url to your private gem server with cre
 See `lib/bundler-pgs/bundler_patch.rb` for details.
 
 As long as the internal implementation of fetching a gem from an url does not change everything is fine.
-In case a newer version of bundler change this code part the url might be stored in Gemfile.lock
+In case a newer version of bundler change this code part the url might be stored in `Gemfile.lock`
 with the credentials again.
 
-Currently bundler version 1.3.5 is supported.
+Currently working bundler version are:
+
+* 1.5.3
+* 1.5.2
 
 ## Usage
 
 Install the gem on **every** server using bundler, e.g. ci, staging and production:
 
-    $ gem install bundler-pgs # pgs = private gem server :)
+    $ gem install bundler-pgs
+
+Exclude script `bundle-pgs` from `NOEXEC`:
+
+    $ export NOEXEC_EXCLUDE="bundle-pgs"
+
+Or better:
+
+    # .bashrc
+    export NOEXEC_EXCLUDE="bundle-pgs"
+    ...
+
+Otherwise you will get strange errors when running `bundle-pgs`, for example:
+
+    $ bundle-pgs
+    ...
+    Resolving dependencies...
+    Could not find gem 'foo (>= 0) ruby' in the gems available on this machine.
 
 Add your private gem server url with `_` (underscore) as placeholder for the credentials:
 
     # Gemfile
-    source "http://rubygems.org"
+    source "https://rubygems.org"
     source "http://_:_@gems.mycompany.com"
 
-Add your credentials to `~/.gem/gemserver_credential` on **every** server using bundler, e.g. ci, staging and production:
+Add your credentials to `~/.gem/gemserver_credential` on **every** server using bundler,
+e.g. ci, staging and production:
 
     # ~/.gem/gemserver_credential
     ---
@@ -57,18 +77,14 @@ Use the bundler patch by running `bundle-pgs` instead of `bundle`, e.g.:
 
     $ bundle-pgs install
 
-This will load the patch and runs bundler as usual.
+This loads bundler as usual and applies the patch.
 
-You will also need to change the bundle command for capistrano:
+You will also need to change the bundle command for Capistrano:
 
     # config/deploy.rb
     ...
     require "bundler/capistrano"
     set :bundle_cmd, "bundle-pgs"
-
-## Caveats
-
-* Does not work with [rubygems-bundler](https://github.com/mpapis/rubygems-bundler) and [bundler-unload](https://github.com/mpapis/bundler-unload) yet.
 
 ## Contact
 
