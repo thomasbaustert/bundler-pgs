@@ -25,11 +25,7 @@ As long as the internal implementation of fetching a gem from an url does not ch
 In case a newer version of bundler change this code part the url might be stored in `Gemfile.lock`
 with the credentials again.
 
-Currently working bundler version are:
-
-* 1.6.2
-* 1.5.3
-* 1.5.2
+bundler-pgs supports bundler 1.7.4 and older.
 
 ## Usage
 

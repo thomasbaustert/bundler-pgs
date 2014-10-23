@@ -1,8 +1,8 @@
 require 'bundler/version'
 
-if Bundler::VERSION > "1.6.2"
+if Bundler::VERSION > "1.7.4"
   puts "\nWarning: You are using bundler #{Bundler::VERSION} and bundler-pgs patch might not work for this version."
-  puts "Make sure your Gemfile.lock does not contain your credentials after running pundle!"
+  puts "Make sure your Gemfile.lock does not contain your credentials after running bundle-pgs!"
   puts ""
 end
 
