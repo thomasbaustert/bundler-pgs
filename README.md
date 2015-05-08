@@ -1,31 +1,30 @@
 # Bundler Private Gem Server
 
-Patch for bundler to support credentials for sources that are not stored in Gemfile.lock.
-Useful when running an additional private gem server besides rubygems.org.
+Patch for bundler to support credentials for sources that are not stored in `Gemfile.lock`.
+Useful when running an additional private gem server besides `rubygems.org`.
 
 Example:
 
     # Gemfile
     source "https://rubygems.org/"
-    source "http://_:_@gems.mycompany.com"
+    source "http://_:_@gems.mycompany.com" do
+      ...
+    end  
 
     # Gemfile.lock
     GEM
       remote: https://rubygems.org/
-      remote: http://_:_@gems.mycompany.com/
+      remote: http://_:_@gems.mycompany.com/ (not http://user:password@gems.mycompany.com)
 
 ## Warning
 
 This comes with no warranty!
 
-To prevent bundler from storing a source url to your private gem server with credentials I had to **patch** bundler.
-See `lib/bundler-pgs/bundler_patch.rb` for details.
+To prevent bundler from storing a source url to your private gem server with credentials 
+I **patched** bundler. See `lib/bundler-pgs/bundler_patch.rb` for details.
 
-As long as the internal implementation of fetching a gem from an url does not change everything is fine.
-In case a newer version of bundler change this code part the url might be stored in `Gemfile.lock`
-with the credentials again.
-
-bundler-pgs supports bundler 1.7.4 and older.
+`bundle-pgs` will raise an exception in case the patched class and method does not exist
+in `bundler`anymore.
 
 ## Usage
 
@@ -54,7 +53,9 @@ Add your private gem server url with `_` (underscore) as placeholder for the cre
 
     # Gemfile
     source "https://rubygems.org"
-    source "http://_:_@gems.mycompany.com"
+    source "http://_:_@gems.mycompany.com" do 
+      gem 'my_private_gem'
+    end    
 
 Add your credentials to `~/.gem/gemserver_credential` on **every** server using bundler,
 e.g. ci, staging and production:
@@ -87,5 +88,5 @@ You will also need to change the bundle command for Capistrano:
 
 For comments and question feel free to contact me: business@thomasbaustert.de
 
-Copyright © 2013 [Thomas Baustert](http://thomasbaustert.de), released under the MIT license
+Copyright by [Thomas Baustert](http://thomasbaustert.de), released under the MIT license
 
