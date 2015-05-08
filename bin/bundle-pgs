@@ -19,7 +19,6 @@ require 'bundler/cli'
 require 'bundler/friendly_errors'
 
 require 'bundler-pgs'
-puts "[bundler-pgs] v#{Bundler::Pgs::VERSION} is loaded"
-puts "[bundler-pgs] patching bundler"
+puts "[bundler-pgs] v#{Bundler::Pgs::VERSION} is used and patches bundler."
 
 Bundler.with_friendly_errors { Bundler::CLI.start }
