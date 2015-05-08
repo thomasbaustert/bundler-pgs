@@ -9,5 +9,4 @@ end
 require "bundler-pgs/version"
 require "bundler-pgs/credential_file"
 require "bundler-pgs/bundler_patch"
-require "bundler-pgs/bundler_dsl_extension"
 
