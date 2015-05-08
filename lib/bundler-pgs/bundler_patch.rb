@@ -1,13 +1,24 @@
-require "yaml"
+require 'yaml'
 require 'bundler'
+
+module Bundler::Pgs
+  class MonkeyPatchFailed < RuntimeError
+    def message
+      "bundler-pgs #{Bundler::Pgs::VERSION} failed to patch bundler #{Bundler::VERSION}. Cause: #{message}"
+    end
+  end
+end
 
 ##
 # Patches Bundler::RubygemsIntegration bundler to use url with the credentials.
 #
+raise Bundler::Pgs::MonkeyPatchFailed, "Bundler::RubygemsIntegration not defined anymore" unless defined?(Bundler::RubygemsIntegration)
+raise Bundler::Pgs::MonkeyPatchFailed, "Bundler::RubygemsIntegration.download_gem not defined anymore" unless Bundler::RubygemsIntegration.new.respond_to?(:download_gem)
+
 module Bundler
   class RubygemsIntegration
     def download_gem(spec, uri, path)
-      new_uri = ::BundlerPatch::UriResolver.resolve(uri)
+      new_uri = ::Bundler::Pgs::UriResolver.resolve(uri)
       Gem::RemoteFetcher.fetcher.download(spec, new_uri, path)
     end
   end
@@ -16,12 +27,14 @@ end
 ##
 # Patches Bundler::Fetcher bundler to use url with the credentials.
 #
+raise Bundler::Pgs::MonkeyPatchFailed, "Bundler::Fetcher not defined anymore" unless defined?(Bundler::Fetcher)
+
 module Bundler
   class Fetcher
     alias_method :orig_initialize, :initialize
 
     def initialize(remote_uri)
-      new_uri = ::BundlerPatch::UriResolver.resolve(remote_uri)
+      new_uri = ::Bundler::Pgs::UriResolver.resolve(remote_uri)
       orig_initialize(new_uri)
     end
   end
@@ -30,9 +43,7 @@ end
 ##
 # Replaces credential placeholder (e.g. http://_:_@....) with the credentials from the credentials file.
 #
-raise MonkeyPatchFailed, "Bundler::Fetcher not defined" unless defined?(Bundler::Fetcher)
-
-module BundlerPatch
+module Bundler::Pgs
   class UriResolver
 
     def self.resolve(uri)
