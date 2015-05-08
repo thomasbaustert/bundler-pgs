@@ -7,6 +7,5 @@ if Bundler::VERSION > "1.7.4"
 end
 
 require "bundler-pgs/version"
-require "bundler-pgs/credential_file"
 require "bundler-pgs/bundler_patch"
 

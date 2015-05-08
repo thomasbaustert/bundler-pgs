@@ -30,9 +30,10 @@ end
 ##
 # Replaces credential placeholder (e.g. http://_:_@....) with the credentials from the credentials file.
 #
+raise MonkeyPatchFailed, "Bundler::Fetcher not defined" unless defined?(Bundler::Fetcher)
+
 module BundlerPatch
   class UriResolver
-    extend BundlerPatch::CredentialFile
 
     def self.resolve(uri)
       if uri_with_hidden_credentials?(uri)
@@ -73,6 +74,13 @@ module BundlerPatch
       end
 
       new_uri || orig_uri
+    end
+
+    def self.with_credential_file(&block)
+      credential_filename = File.join(ENV["HOME"], ".gem", "gemserver_credentials")
+      if File.exists?(credential_filename)
+        yield(credential_filename) if block_given?
+      end
     end
 
     def self.uri_with_hidden_credentials?(uri)
