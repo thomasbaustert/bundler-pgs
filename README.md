@@ -1,3 +1,5 @@
+**THIS GEM IS NOT MAINTAINED ANYMORE. Use bundle config to set your credentials**
+
 # Bundler Private Gem Server
 
 Patch for bundler to support credentials for sources that are not stored in `Gemfile.lock`.
